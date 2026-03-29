@@ -1,0 +1,17 @@
+services:
+  navidrome:
+    image: deluan/navidrome:latest
+    container_name: navidrome
+    restart: unless-stopped
+    ports:
+      - "4533:4533"
+    environment:
+      - ND_SCANSCHEDULE=${ND_SCANSCHEDULE}
+      - ND_LOGLEVEL=${ND_LOGLEVEL}
+      - ND_SESSIONTIMEOUT=${ND_SESSIONTIMEOUT}
+      - ND_MUSICFOLDER=${ND_MUSICFOLDER}
+      - ND_DATAFOLDER=${ND_DATAFOLDER}
+      - ND_SHAREDFOLDERS=${ND_SHAREDFOLDERS}
+    volumes:
+      - ${ND_DATAFOLDER}:${ND_DATAFOLDER}
+      - ${ND_SHAREDFOLDERS}:${ND_MUSICFOLDER}:ro

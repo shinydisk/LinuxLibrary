@@ -1,1 +1,6 @@
 .DS_Store
+
+# Confidential environment
+docker/minecraft/.env-confidential
+docker/vaultwarden/.env-confidential
+docker/navidrome/.env-confidential

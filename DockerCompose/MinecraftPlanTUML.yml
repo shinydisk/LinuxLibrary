@@ -1,9 +1,0 @@
-services:
-  plantuml:
-    image: plantuml/plantuml-server:latest
-    container_name: plantuml-server
-    ports:
-      - "22443:8080"
-    restart: unless-stopped
-    environment:
-      - TZ=Europe/Paris

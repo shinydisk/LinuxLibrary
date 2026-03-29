@@ -1,0 +1,77 @@
+services:
+  minecraft:
+    image: marctv/minecraft-papermc-server:latest
+    restart: unless-stopped
+    container_name: mc
+    env_file:
+      - .env
+    environment:
+      MEMORYSIZE: "${MC_MEMORY}"
+      EULA: "TRUE"
+      PAPERMC_FLAGS: ""
+      WHITELIST: "${MC_WHITELIST}"
+      OPS: "${MC_OPS}"
+      TZ: "${MC_TZ}"
+    volumes:
+      - minecraftserver:/data
+    ports:
+      - "25565:25565"
+    networks:
+      - mc-network
+    stdin_open: true
+    tty: true
+    deploy:
+      resources:
+        limits:
+          memory: "${MC_MEM_LIMIT}"
+          cpus: "${MC_CPU_LIMIT}"
+        reservations:
+          memory: "${MC_MEM_RESERVE}"
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "25565"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
+
+  plantuml:
+    image: plantuml/plantuml-server:jetty
+    container_name: mc-plantuml-server
+    env_file:
+      - .env
+    expose:
+      - "8080"
+    networks:
+      - mc-network
+    restart: unless-stopped
+    environment:
+      TZ: "${PLANTUML_TZ}"
+      PLANTUML_LIMIT_SIZE: "${PLANTUML_LIMIT_SIZE}"
+    deploy:
+      resources:
+        limits:
+          memory: "${PLANTUML_MEM_LIMIT}"
+          cpus: "${PLANTUML_CPU_LIMIT}"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/plantuml"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/cache
+
+networks:
+  mc-network:
+    driver: bridge
+    name: mc-network
+
+volumes:
+  minecraftserver:
