@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # ~/.MOTD.sh — Rocky Linux Docker Host
 # Source depuis ~/.bashrc :
 #   [ -f "$HOME/.MOTD.sh" ] && bash "$HOME/.MOTD.sh"
